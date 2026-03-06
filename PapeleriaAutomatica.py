@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from io import StringIO
 import pandas as pd
 import requests
-
+import sys
 
 def obtener_tabla(response):
     if response.status_code == 200:
@@ -20,11 +20,20 @@ def check_weekend() -> bool:
 
 
 # -------- INICIO DEL PROGRAMA --------
+if len(sys.argv) > 1:
+    try:
+        valor = float(sys.argv[1])
+        ayer = date.today() - timedelta(days=valor)
+        print(valor)
+    except ValueError:
+        print("No es un número válido")
+        sys.exit()
 
-if check_weekend():
-    ayer = date.today() - timedelta(days=2)
 else:
-    ayer = date.today() - timedelta(days=1)
+    if check_weekend():
+        ayer = date.today() - timedelta(days=2)
+    else:
+        ayer = date.today() - timedelta(days=1)
 
 url = "http://10.16.49.45:888/pvpap/uni_cont.php"
 
